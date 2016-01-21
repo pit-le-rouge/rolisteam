@@ -71,6 +71,11 @@ ChatList::ChatList(MainWindow * mainWindow)
 {
     m_chatMenu.setTitle(tr("ChatWindows"));
 
+<<<<<<< HEAD
+=======
+    // main (public) chat
+    addChatWindow(new ChatWindow(new PublicChat()));
+>>>>>>> Rolisteam/master
 
 
 	// Stay sync with g_playersList
@@ -232,7 +237,7 @@ bool ChatList::addLocalChat(PrivateChat * chat)
 
     if (!PreferencesManager::getInstance()->value("isClient",true).toBool())
         m_privateChatMap.insert(chat->identifier(), chat);
-    addChatWindow(new ChatWindow(chat,m_mainWindow));
+    addChatWindow(new ChatWindow(chat));
     return true;
 }
 
@@ -255,6 +260,8 @@ bool ChatList::delLocalChat(const QModelIndex & index)
 
 void ChatList::addChatWindow(ChatWindow* chatw)
 {
+
+    connect(m_mainWindow, SIGNAL(closing()), chatw, SLOT(save()));
     int listSize = m_chatWindowList.size();
     beginInsertRows(QModelIndex(), listSize, listSize);
 
@@ -352,7 +359,7 @@ void ChatList::addPlayerChat(Player * player)
         ChatWindow * chatw = getChatWindowByUuid(player->getUuid());
         if (chatw == NULL)
         {
-            addChatWindow(new ChatWindow(new PlayerChat(player), m_mainWindow));
+            addChatWindow(new ChatWindow(new PlayerChat(player)));
         }
     }
 }
@@ -512,12 +519,12 @@ void ChatList::updatePrivateChat(ReceiveEvent * event)
 
     else if (newChat->includeLocalPlayer())
     {
-        addChatWindow(new ChatWindow(newChat,m_mainWindow));
+        addChatWindow(new ChatWindow(newChat));
     }
-
-
     else if (PreferencesManager::getInstance()->value("isClient",true).toBool())
+    {
         delete newChat;
+    }
 }
 
 void ChatList::deletePrivateChat(ReceiveEvent * event)

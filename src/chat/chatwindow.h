@@ -63,7 +63,11 @@ public :
      * @param chat
      * @param parent
      */
+<<<<<<< HEAD
 	ChatWindow(AbstractChat * chat,QWidget* parent = NULL);
+=======
+    ChatWindow(AbstractChat * chat);
+>>>>>>> Rolisteam/master
     /**
      * @brief ~ChatWindow
      */
@@ -115,6 +119,11 @@ public :
      * @param map
      */
     static void updateDiceAliases(QList<DiceAlias*>* map);
+    /**
+     * @brief getTextZone
+     * @return
+     */
+    ImprovedTextEdit* getTextZone()const;
 signals:
     /**
      * @brief ChatWindowHasChanged

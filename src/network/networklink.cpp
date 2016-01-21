@@ -45,10 +45,15 @@
 NetworkLink::NetworkLink(QTcpSocket *socket)
     : QObject(NULL),m_mainWindow(NULL)
 {
+    m_socketTcp = socket;
+<<<<<<< HEAD
+    m_receivingData = false;
+=======
+    receptionEnCours = false;
+#ifndef UNIT_TEST
     m_mainWindow = MainWindow::getInstance();
     m_networkManager = m_mainWindow->getNetWorkManager();
-    m_socketTcp = socket;
-    m_receivingData = false;
+>>>>>>> Rolisteam/master
 	ReceiveEvent::registerNetworkReceiver(NetMsg::PictureCategory,m_mainWindow);
     ReceiveEvent::registerNetworkReceiver(NetMsg::MapCategory,m_mainWindow);
     ReceiveEvent::registerNetworkReceiver(NetMsg::VMapCategory,m_mainWindow);
@@ -57,6 +62,7 @@ NetworkLink::NetworkLink(QTcpSocket *socket)
     ReceiveEvent::registerNetworkReceiver(NetMsg::CharacterCategory,m_mainWindow);
     ReceiveEvent::registerNetworkReceiver(NetMsg::ConnectionCategory,m_mainWindow);
     ReceiveEvent::registerNetworkReceiver(NetMsg::CharacterPlayerCategory,m_mainWindow);
+#endif
 #ifndef NULL_PLAYER
     m_audioPlayer = AudioPlayer::getInstance();
     ReceiveEvent::registerNetworkReceiver(NetMsg::MusicCategory,m_audioPlayer);
@@ -67,7 +73,9 @@ NetworkLink::NetworkLink(QTcpSocket *socket)
     //if (PreferencesManager::getInstance()->value("isClient",true).toBool())
     if(!m_networkManager->isServer())
     {
+#ifndef UNIT_TEST
 		m_networkManager->ajouterNetworkLink(this);
+#endif
     }
 }
 void NetworkLink::initialize()
@@ -181,6 +189,8 @@ void NetworkLink::receivingData()
                 case NetMsg::SetupCategory :
                     processSetupMessage(&data);
                     break;
+                default:
+                    break;
             }
             delete[] m_buffer;
             m_receivingData = false;
@@ -195,13 +205,25 @@ void NetworkLink::processPlayerMessage(NetworkMessageReader* msg)
     {
         if(NetMsg::PlayerConnectionAction == msg->action())
         {
+#ifndef UNIT_TEST
             m_networkManager->ajouterNetworkLink(this);
+<<<<<<< HEAD
 
             NetworkMessageHeader header;
             header.category = NetMsg::SetupCategory;
             header.action = NetMsg::EndConnectionAction;
             header.dataSize = 0;
             sendData((char *)&header, sizeof(NetworkMessageHeader));
+=======
+#endif
+            // On indique au nouveau joueur que le processus de connexion vient d'arriver a son terme
+            NetworkMessageHeader uneEntete;
+            uneEntete.category = NetMsg::SetupCategory;
+            uneEntete.action = NetMsg::EndConnectionAction;
+            uneEntete.dataSize = 0;
+
+            emissionDonnees((char *)&uneEntete, sizeof(NetworkMessageHeader));
+>>>>>>> Rolisteam/master
         }
         else if(NetMsg::AddPlayerAction == msg->action())
         {
@@ -230,11 +252,16 @@ void NetworkLink::processSetupMessage(NetworkMessageReader* msg)
 }
 void NetworkLink::forwardMessage( NetWorkReceiver::SendType type)
 {
+<<<<<<< HEAD
     if(NetWorkReceiver::NONE == type)
     {
         return;
     }
     if (m_networkManager->isServer())
+=======
+#ifndef UNIT_TEST
+    if (!PreferencesManager::getInstance()->value("isClient",true).toBool())
+>>>>>>> Rolisteam/master
     {
         char *donnees = new char[m_header.dataSize + sizeof(NetworkMessageHeader)];
         memcpy(donnees, &m_header, sizeof(NetworkMessageHeader));
@@ -249,6 +276,7 @@ void NetworkLink::forwardMessage( NetWorkReceiver::SendType type)
         }
         delete[] donnees;
     }
+#endif
 }
 void NetworkLink::disconnectAndClose()
 {

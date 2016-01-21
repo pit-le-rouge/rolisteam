@@ -47,6 +47,16 @@ void NetworkMessage::sendTo(NetworkLink * link)
 void NetworkMessage::sendAll(NetworkLink * butLink)
 {
     NetworkMessageHeader * header = buffer();
+<<<<<<< HEAD
     m_server->sendMessage((char *)header, header->dataSize + sizeof(NetworkMessageHeader), butLink);
     //qDebug() << "datasize send:" << header->dataSize + sizeof(NetworkMessageHeader) << header->action << header->category;
+=======
+    if(NULL!=m_server)
+    {
+#ifndef UNIT_TEST
+        m_server->emettreDonnees((char *)header, header->dataSize + sizeof(NetworkMessageHeader), butLink);
+#endif
+    }
+    //qDebug() << "header data size send:" << header->dataSize << header->action << header->category;
+>>>>>>> Rolisteam/master
 }

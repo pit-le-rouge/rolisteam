@@ -37,7 +37,11 @@
 #include "chat/chat.h"
 #include "network/networkmessagewriter.h"
 #include "localpersonmodel.h"
+<<<<<<< HEAD
 #include "data/person.h"
+=======
+#include "data/persons.h"
+>>>>>>> Rolisteam/master
 #include "userlist/playersList.h"
 #include "chat/improvedtextedit.h"
 
@@ -46,8 +50,13 @@
 QStringList ChatWindow::m_keyWordList;
 QList<DiceAlias*>* ChatWindow::m_receivedAlias = NULL;
 
+<<<<<<< HEAD
 ChatWindow::ChatWindow(AbstractChat * chat,QWidget* parent)
 	: QWidget(parent), m_chat(chat), m_filename("%1/%2.html")
+=======
+ChatWindow::ChatWindow(AbstractChat * chat)
+    : QWidget(), m_chat(chat), m_filename("%1/%2.html")
+>>>>>>> Rolisteam/master
 {
     m_preferences = PreferencesManager::getInstance();
     if (m_chat == NULL)
@@ -66,6 +75,10 @@ ChatWindow::ChatWindow(AbstractChat * chat,QWidget* parent)
 	connect(m_editionZone, SIGNAL(textValidated(bool,QString)), this, SLOT(emettreTexte(bool,QString)));
     connect(m_editionZone, SIGNAL(ctrlUp()), this, SLOT(upSelectPerson()));
     connect(m_editionZone, SIGNAL(ctrlDown()), this, SLOT(downSelectPerson()));
+<<<<<<< HEAD
+=======
+    //connect(m_mainWindow, SIGNAL(closing()), this, SLOT(save()));
+>>>>>>> Rolisteam/master
     connect(m_chat, SIGNAL(changedMembers()), this, SLOT(scheduleUpdateChatMembers()));
 
     m_toggleViewAction = new QAction(this);
@@ -249,6 +262,13 @@ void ChatWindow::emettreTexte(bool hasHtml,QString message)
     bool ok=true;
     m_editionZone->clear();
 
+<<<<<<< HEAD
+=======
+
+    QString localPersonIdentifier = m_selectPersonComboBox->itemData(m_selectPersonComboBox->currentIndex(), PlayersList::IdentifierRole).toString();
+    Person* localPerson = PlayersList::instance()->getPerson(localPersonIdentifier);
+
+>>>>>>> Rolisteam/master
     QString tmpmessage=message.simplified();
     QString messageCorps="";
     QString messageTitle="";
@@ -276,6 +296,7 @@ void ChatWindow::emettreTexte(bool hasHtml,QString message)
             if(m_keyWordList.contains(cmd))
             {
                 tmpmessage=tmpmessage.remove(0,pos);
+                message = tmpmessage;
                 if (!m_warnedEmoteUnavailable && !m_chat->everyPlayerHasFeature(QString("Emote")))
                 {
                     messageTitle = tr("Warning");
@@ -285,9 +306,17 @@ void ChatWindow::emettreTexte(bool hasHtml,QString message)
                     m_warnedEmoteUnavailable = true;
                 }
 
+<<<<<<< HEAD
 
                 showMessage(m_localPerson->getName(), m_localPerson->getColor(), tmpmessage,NetMsg::EmoteMessageAction);
                 action = NetMsg::EmoteMessageAction;
+=======
+                if(NULL!=localPerson)
+                {
+                    showMessage(localPerson->name(), localPerson->color(), tmpmessage,NetMsg::EmoteMessageAction);
+                    action = NetMsg::EmoteMessageAction;
+                }
+>>>>>>> Rolisteam/master
                 break;
 
             }
@@ -615,7 +644,13 @@ void ChatWindow::detachView(bool b)
             m_window->setVisible(true);
     }
 }
+<<<<<<< HEAD
 void ChatWindow::setLocalPlayer(Person* person)
 {
     m_localPerson = person;
+=======
+ImprovedTextEdit* ChatWindow::getTextZone()const
+{
+    return m_editionZone;
+>>>>>>> Rolisteam/master
 }
