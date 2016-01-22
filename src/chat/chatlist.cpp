@@ -71,11 +71,7 @@ ChatList::ChatList(MainWindow * mainWindow)
 {
     m_chatMenu.setTitle(tr("ChatWindows"));
 
-<<<<<<< HEAD
-=======
-    // main (public) chat
-    addChatWindow(new ChatWindow(new PublicChat()));
->>>>>>> Rolisteam/master
+
 
 
 	// Stay sync with g_playersList

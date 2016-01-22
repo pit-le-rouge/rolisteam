@@ -63,11 +63,7 @@ public :
      * @param chat
      * @param parent
      */
-<<<<<<< HEAD
 	ChatWindow(AbstractChat * chat,QWidget* parent = NULL);
-=======
-    ChatWindow(AbstractChat * chat);
->>>>>>> Rolisteam/master
     /**
      * @brief ~ChatWindow
      */

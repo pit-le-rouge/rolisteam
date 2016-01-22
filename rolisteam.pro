@@ -16,6 +16,7 @@ LANGUAGE = C++
 MOC_DIR = bin
 OBJECTS_DIR = bin
 UI_DIR = src
+CONFIG += c++11
 
 isEmpty(PREFIX) {
  PREFIX = /usr/local/bin
